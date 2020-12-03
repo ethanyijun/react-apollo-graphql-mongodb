@@ -82,14 +82,15 @@ const schema = new GraphQLSchema({
 		name: "Create",
 		fields: {
 			people: {
-				type: PersonType,
+				type: GraphQLList(PersonType),
 				args: {
 					firstName: { type: GraphQLString },
 					lastName: { type: GraphQLString }
 				},
 				resolve: (root, args, context, info) => {
 					var people = new PersonModel(args);
-					return people.save();
+					people.save();
+					return PersonModel.find({'firstName':args.firstName}).exec();
 				}
 			}
 		}
