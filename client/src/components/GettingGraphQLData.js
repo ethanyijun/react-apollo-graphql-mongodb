@@ -10,6 +10,8 @@ function GettingGraphQLData() {
     const [input, setInput] = useState("");
     const [fName, setfName] = useState("");
     const [lName, setlName] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
 
     const ADD_PEOPLE = gql`
     mutation People($firstName: String!, $lastName: String!) {
@@ -20,6 +22,17 @@ function GettingGraphQLData() {
       }
     }
   `;
+
+    useEffect(() => {
+        // Update the document title using the browser API
+        let names = input.split(" ");
+        if (names.length > 1) {
+            setFirstName(names[0]);
+            setLastName(names[1]);
+        } else {
+            setFirstName(names[0]);
+        }
+    },[input]);
 
     const GET_PEOPLE = input === ""? gql`
     query People {
@@ -53,7 +66,7 @@ function GettingGraphQLData() {
             <input type="text" value={input} onChange={e => {
                 setInput(e.target.value);
             }} />
-            <button onClick={() => doRequest({ variables: { firstName: "Vin", lastName:"Disel" } })}>
+            <button onClick={() => doRequest({ variables: { firstName: firstName } })}>
                 Find
             </button>
             <div>
